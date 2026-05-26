@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwitiRit.SR - Profiel</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/profile.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="brand-name">
+                <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="beoordelen.html">Beoordelen</a>
+                <a href="dashboard-tct.html">TCT Dashboard</a>
+                <a href="company-panel.html">Bedrijfs Dashboard</a>
+                <a href="profile.html" class="active">Profiel</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="profile-hero">
+        <div class="hero-copy">
+            <span class="eyebrow">Reizigersprofiel</span>
+            <h1>Uw ritten, coins en voordelen op een plek</h1>
+            <p>Volg uw profielgegevens, verzamel coins met beoordelingen en bouw mee aan beter openbaar vervoer in Suriname.</p>
+        </div>
+        <div class="hero-panel" aria-label="Profiel voordelen">
+            <div>
+                <span class="stat-value">1</span>
+                <span class="stat-label">Coin per review</span>
+            </div>
+            <div>
+                <span class="stat-value">100</span>
+                <span class="stat-label">Coins per rit</span>
+            </div>
+            <div>
+                <span class="stat-value">SR</span>
+                <span class="stat-label">Rewards</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="profile-layout-container">
+        <aside class="profile-sidebar-wrapper">
+            <section class="profile-avatar-card">
+                <div class="avatar-holder" aria-label="Profielfoto">
+                    <div class="avatar-initials" id="userAvatar">SR</div>
+                </div>
+
+                <div id="profileContent">
+                    <h2 id="userName">Laden...</h2>
+                    <p id="userRole" class="profile-role-badge">Rol</p>
+
+                    <div class="profile-details-list">
+                        <p><strong>Email</strong><span id="userEmail">-</span></p>
+                        <p><strong>Lid sinds</strong><span id="userDate">-</span></p>
+                    </div>
+                </div>
+
+                <div class="profile-actions">
+                    <button id="editProfileBtn" class="admin-btn edit-profile-btn">Profiel Bewerken</button>
+                    <button id="logoutBtn" class="admin-btn logout-btn">Afmelden</button>
+                </div>
+            </section>
+        </aside>
+
+        <section class="profile-main-content">
+            <section class="motivation-card">
+                <span class="card-kicker">Blijf beoordelen</span>
+                <h2>Elke ritbeoordeling maakt vervoer slimmer</h2>
+                <p>Verzamel punten bij elke rit die u maakt. Uw beoordelingen helpen de kwaliteit van transport in Suriname te verbeteren en leveren direct voordeel op.</p>
+            </section>
+
+            <section class="rewards-balance-card">
+                <div>
+                    <span class="card-kicker dark">Jouw Saldo</span>
+                    <h2>Switi Coins</h2>
+                </div>
+                <div class="coin-wrapper">
+                    <span class="coin-value" id="userCoins">0</span>
+                    <span class="coin-text">Coins</span>
+                </div>
+            </section>
+
+            <section class="rewards-rules-grid" aria-label="Beloningsregels">
+                <article class="rule-item">
+                    <span class="rule-number">1</span>
+                    <h3>De Gulden Regel</h3>
+                    <p class="rule-highlight">1 Beoordeling = 1 Coin</p>
+                    <p class="rule-subtext">Elke rit die u succesvol beoordeelt, voegt direct een coin toe aan uw saldo.</p>
+                </article>
+
+                <article class="rule-item tip-item">
+                    <span class="rule-number">100</span>
+                    <h3>Pro Tip</h3>
+                    <p class="rule-highlight">100 Coins = 1 Gratis Rit</p>
+                    <p class="rule-subtext">Spaar uw coins op. Zodra u 100 coins bereikt, kunt u deze inwisselen voor een gratis rit.</p>
+                </article>
+            </section>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <p>&copy; Est. 2025 SwitiRit.SR. All rights reserved.</p>
+                <p class="owner-text">Ontwikkeld door Vision Five - Smart Traffic for a Brighter Future</p>
+            </div>
+            <div class="footer-logo-placeholder">
+                <img src="img/vision-five-logo.png" alt="Vision Five Logo" class="footer-logo-img">
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        setTimeout(async () => {
+            try {
+                const userId = sessionContext?.userId || parseInt(sessionStorage.getItem('userId')) || 1;
+
+                const response = await fetch(`http://localhost:5000/api/user/profile`, {
+                    headers: { 'x-user-id': userId.toString() }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Server fout: ${response.status}`);
+                }
+
+                const user = await response.json();
+
+                document.getElementById('userName').innerText = `${user.first_name} ${user.last_name}`;
+                document.getElementById('userEmail').innerText = user.email;
+                document.getElementById('userRole').innerText = user.role;
+                document.getElementById('userDate').innerText = new Date(user.created_at).toLocaleDateString('nl-NL');
+                document.getElementById('userCoins').innerText = user.coins || 0;
+
+                const initials = `${user.first_name?.[0] || 'S'}${user.last_name?.[0] || 'R'}`.toUpperCase();
+                document.getElementById('userAvatar').innerText = initials;
+            } catch (error) {
+                console.error('Fout bij het laden van profiel:', error);
+                document.getElementById('profileContent').innerHTML = `
+                    <div class="profile-state error">
+                        Laden mislukt. Controleer de backend verbinding.
+                    </div>
+                `;
+            }
+
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                if (confirm('Weet je zeker dat je wilt afmelden?')) {
+                    sessionStorage.clear();
+                    window.location.href = 'login.html';
+                }
+            });
+
+            document.getElementById('editProfileBtn').addEventListener('click', () => {
+                alert('Profiel bewerken functionaliteit kan hier worden gekoppeld.');
+            });
+        }, 100);
+    </script>
+</body>
+</html>

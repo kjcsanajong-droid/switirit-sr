@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwitiRit.SR - Rit Beoordelen</title>
+    <link rel="stylesheet" href="css/beoordelen.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="brand-name">
+                <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="beoordelen.html" class="active">Beoordelen</a>
+                <a href="dashboard-tct.html">TCT Dashboard</a>
+                <a href="company-panel.html">Bedrijfs Dashboard</a>
+                <a href="profile.html">Profiel</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="review-hero">
+        <div class="hero-copy">
+            <span class="eyebrow">Ritkwaliteit verbeteren</span>
+            <h1>Deel uw ervaring en help het openbaar vervoer vooruit</h1>
+            <p>Uw beoordeling geeft inzicht in rijgedrag, comfort, hygiene en servicekwaliteit op Surinaamse buslijnen.</p>
+        </div>
+        <div class="hero-panel" aria-label="Beoordeling focuspunten">
+            <div>
+                <span class="stat-value">5</span>
+                <span class="stat-label">Scorepunten</span>
+            </div>
+            <div>
+                <span class="stat-value">SR</span>
+                <span class="stat-label">Routes</span>
+            </div>
+            <div>
+                <span class="stat-value">TCT</span>
+                <span class="stat-label">Inzicht</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="beoordelen-container">
+        <section class="motivation-card">
+            <span class="card-kicker">Waarom beoordelen?</span>
+            <h2>Samen bouwen aan beter vervoer</h2>
+            <p>Elke beoordeling helpt om de kwaliteit van het openbaar vervoer in Paramaribo en omliggende districten te verbeteren.</p>
+            <p>Door eerlijke feedback te geven over <strong>rijgedrag</strong>, <strong>hygiene</strong>, <strong>comfort</strong> en <strong>airconditioning</strong>, maken we ritten veiliger en prettiger voor iedereen.</p>
+            <div class="motivation-badge">Uw stem stuurt de verbetering</div>
+        </section>
+
+        <section class="form-card">
+            <div class="form-heading">
+                <span class="form-icon">B</span>
+                <div>
+                    <h2>Busrit Beoordelen</h2>
+                    <p class="form-subtitle">Vul de gegevens nauwkeurig in zodat uw feedback goed verwerkt kan worden.</p>
+                </div>
+            </div>
+
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label for="busRouteSelect">Kies de Buslijn</label>
+                    <select id="busRouteSelect" required>
+                        <option value="">Lijnen laden...</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="busPlate">Kenteken van de Bus</label>
+                    <input type="text" id="busPlate" placeholder="Bijv. PA 88-88" required maxlength="10">
+                </div>
+
+                <div class="rating-panel">
+                    <div class="rating-heading">
+                        <span class="card-kicker">Score</span>
+                        <h3>Beoordeel de rit van 1 tot 5</h3>
+                    </div>
+                    <div class="form-grid-3">
+                        <div class="form-group">
+                            <label for="drivingRating">Rijgedrag Chauffeur</label>
+                            <input type="number" id="drivingRating" min="1" max="5" placeholder="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="comfortRating">Comfort & Gemak</label>
+                            <input type="number" id="comfortRating" min="1" max="5" placeholder="5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="hygieneRating">Hygiene</label>
+                            <input type="number" id="hygieneRating" min="1" max="5" placeholder="5" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="aircoWorking">Werkte de Airconditioning?</label>
+                    <select id="aircoWorking" required>
+                        <option value="JA">Ja, perfect</option>
+                        <option value="GEEN">Matig / Zwak</option>
+                        <option value="NEE">Nee, defect</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="commentText">Algemene Ritervaring / Opmerkingen</label>
+                    <textarea id="commentText" rows="4" placeholder="Deel hier uw specifieke ervaring over de rit..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="suggestionText">Suggestion Bar - Wat kan er beter?</label>
+                    <textarea id="suggestionText" rows="3" placeholder="Laat hier uw suggesties achter voor verbetering van de dienstverlening..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-modern-submit">
+                    <span>Beoordeling Insturen</span>
+                </button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <p>&copy; Est. 2025 SwitiRit.SR. All rights reserved.</p>
+                <p class="owner-text">Ontwikkeld door Vision Five - Smart Traffic for a Brighter Future</p>
+            </div>
+            <div class="footer-logo-placeholder">
+                <img src="img/vision-five-logo.png" alt="Vision Five Logo" class="footer-logo-img">
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

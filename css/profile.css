@@ -1,0 +1,522 @@
+/* Profile rewards page */
+
+html {
+    scroll-behavior: smooth;
+}
+
+.profile-hero {
+    width: min(1180px, calc(100% - 40px));
+    margin: 24px auto 14px;
+    padding: 34px;
+    display: grid;
+    grid-template-columns: minmax(0, 500px) 380px;
+    justify-content: space-between;
+    gap: 32px;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+    background:
+        linear-gradient(112deg, rgba(0, 95, 48, 0.96) 0 44%, #ffffff 44% 47%, rgba(252, 209, 22, 0.96) 47% 56%, #ffffff 56% 59%, rgba(200, 16, 46, 0.96) 59% 100%),
+        linear-gradient(135deg, var(--sr-green), var(--sr-red));
+    box-shadow: var(--shadow-md);
+}
+
+.profile-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -80px -92px auto;
+    width: 360px;
+    height: 220px;
+    background:
+        linear-gradient(90deg, transparent 0 13%, rgba(255, 255, 255, 0.24) 13% 16%, transparent 16% 33%, rgba(255, 255, 255, 0.16) 33% 36%, transparent 36%),
+        linear-gradient(135deg, rgba(252, 209, 22, 0.92), rgba(200, 16, 46, 0.82));
+    clip-path: polygon(12% 32%, 86% 32%, 100% 55%, 88% 72%, 18% 72%, 0 55%);
+    opacity: 0.72;
+}
+/* Update the hero layout to manage spacing dynamically and prevent elements from overlapping */
+.profile-hero {
+    width: min(1180px, calc(100% - 40px));
+    margin: 24px auto 14px;
+    padding: 34px;
+    display: grid;
+    /* Changed from static pixels to flexible fractions with a controlled max-width */
+    grid-template-columns: minmax(300px, 1.2fr) minmax(280px, 1fr);
+    justify-content: space-between;
+    gap: 40px;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
+    border-radius: 8px;
+    background:
+        linear-gradient(112deg, rgba(0, 95, 48, 0.96) 0 44%, #ffffff 44% 47%, rgba(252, 209, 22, 0.96) 47% 56%, #ffffff 56% 59%, rgba(200, 16, 46, 0.96) 59% 100%),
+        linear-gradient(135deg, var(--sr-green), var(--sr-red));
+    box-shadow: var(--shadow-md);
+}
+
+/* Ensure the copy container doesn't force line breaks awkwardly */
+.hero-copy {
+    min-width: 0;
+}
+
+/* Ensure the interactive right-hand hero panel container fits cleanly inside its grid slot */
+.profile-hero .hero-panel {
+    width: 100%;
+    max-width: 380px;
+    justify-self: end;
+    z-index: 2; /* Lifts the content panel safely above the background shapes */
+}
+
+/* Push the background absolute pattern deep into the background stack */
+.profile-hero::after {
+    content: "";
+    position: absolute;
+    inset: auto -80px -92px auto;
+    width: 360px;
+    height: 220px;
+    background: linear-gradient(90deg, transparent 0 13%, rgba(255, 255, 255, 0.05) 13% 100%);
+    transform: rotate(-12deg);
+    z-index: 1; /* Keeps decorative elements underneath text boxes */
+    pointer-events: none;
+}
+
+.profile-layout-container {
+    width: min(1180px, calc(100% - 40px));
+    margin: 8px auto 0;
+    display: grid;
+    grid-template-columns: minmax(280px, 0.78fr) minmax(0, 1.22fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.profile-sidebar-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: -30px;
+}
+
+.profile-avatar-card,
+.motivation-card,
+.rewards-balance-card,
+.rule-item {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(219, 227, 238, 0.95);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: var(--shadow-sm);
+}
+
+.profile-avatar-card::before,
+.motivation-card::before,
+.rewards-balance-card::before,
+.rule-item::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 5px;
+    background: linear-gradient(90deg, var(--sr-green), var(--sr-gold), var(--sr-red));
+}
+
+.profile-avatar-card {
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    max-width: 340px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.avatar-holder {
+    width: 148px;
+    height: 148px;
+    margin-bottom: 20px;
+    border-radius: 50%;
+    padding: 6px;
+    background: linear-gradient(135deg, var(--sr-green), var(--sr-gold), var(--sr-red));
+    box-shadow: 0 18px 38px rgba(0, 95, 48, 0.2);
+}
+
+.avatar-initials {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--sr-green-dark), var(--sr-green));
+    font-size: 2.7rem;
+    font-weight: 900;
+}
+
+#profileContent {
+    width: 100%;
+}
+
+#userName {
+    margin: 0;
+    color: var(--sr-ink);
+    font-size: 1.45rem;
+    line-height: 1.15;
+    font-weight: 900;
+}
+
+.profile-role-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    margin: 10px 0 18px;
+    padding: 0 12px;
+    border-radius: 999px;
+    color: var(--sr-green);
+    background: rgba(0, 122, 61, 0.1);
+    font-size: 0.78rem;
+    font-weight: 850;
+    text-transform: uppercase;
+}
+
+.profile-details-list {
+    width: 100%;
+    padding-top: 16px;
+    border-top: 1px solid var(--sr-line);
+    text-align: left;
+}
+
+.profile-details-list p {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    margin: 10px 0;
+    color: var(--sr-muted);
+    font-size: 0.9rem;
+}
+
+.profile-details-list strong {
+    color: var(--sr-ink);
+}
+
+.profile-actions {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.admin-btn {
+    min-width: 140px;
+    min-height: 44px;
+    border: 0;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 850;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, filter 0.18s ease, background-color 0.18s ease;
+}
+
+.edit-profile-btn {
+    color: var(--sr-ink);
+    background: var(--sr-gold);
+    box-shadow: 0 12px 24px rgba(252, 209, 22, 0.2);
+}
+
+.logout-btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, var(--sr-red), var(--sr-red-dark));
+    box-shadow: 0 12px 24px rgba(200, 16, 46, 0.2);
+}
+
+.admin-btn:hover {
+    transform: translateY(-1px);
+    filter: saturate(1.08);
+}
+
+.profile-main-content {
+    display: grid;
+    gap: 24px;
+}
+
+.motivation-card {
+    padding: 28px;
+}
+
+.card-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--sr-gold);
+    font-size: 0.78rem;
+    font-weight: 850;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.card-kicker::before {
+    content: "";
+    width: 28px;
+    height: 3px;
+    border-radius: 999px;
+    background: currentColor;
+}
+
+.card-kicker.dark {
+    color: var(--sr-green);
+}
+
+.motivation-card h2 {
+    margin: 14px 0 10px;
+    color: var(--sr-ink);
+    font-size: 1.55rem;
+    line-height: 1.15;
+    font-weight: 900;
+}
+
+.motivation-card p {
+    max-width: 720px;
+    margin: 0;
+    color: var(--sr-muted);
+    font-size: 0.95rem;
+    line-height: 1.65;
+}
+
+.rewards-balance-card {
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    background:
+        linear-gradient(135deg, rgba(252, 209, 22, 0.9), rgba(255, 243, 184, 0.78)),
+        #ffffff;
+}
+
+.rewards-balance-card h2 {
+    margin: 8px 0 0;
+    color: var(--sr-ink);
+    font-size: 1.45rem;
+    font-weight: 900;
+}
+
+.coin-wrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.coin-value {
+    color: var(--sr-ink);
+    font-size: clamp(3rem, 8vw, 5.2rem);
+    font-weight: 950;
+    line-height: 0.9;
+}
+
+.coin-text {
+    color: var(--sr-green-dark);
+    font-size: 1rem;
+    font-weight: 850;
+}
+
+.rewards-rules-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+}
+
+.rule-item {
+    padding: 24px;
+}
+
+.rule-number {
+    width: 46px;
+    height: 46px;
+    display: grid;
+    place-items: center;
+    margin-bottom: 16px;
+    border-radius: 8px;
+    color: #ffffff;
+    background: var(--sr-green);
+    font-weight: 900;
+    box-shadow: 0 12px 24px rgba(0, 122, 61, 0.2);
+}
+
+.tip-item .rule-number {
+    color: var(--sr-ink);
+    background: var(--sr-gold);
+    box-shadow: 0 12px 24px rgba(252, 209, 22, 0.22);
+}
+
+.rule-item h3 {
+    margin: 0 0 10px;
+    color: var(--sr-ink);
+    font-size: 1.18rem;
+    font-weight: 900;
+}
+
+.rule-highlight {
+    margin: 0 0 10px;
+    color: var(--sr-green);
+    font-size: 1.05rem;
+    font-weight: 900;
+}
+
+.tip-item .rule-highlight {
+    color: var(--sr-red);
+}
+
+.rule-subtext {
+    margin: 0;
+    color: var(--sr-muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+}
+
+.profile-state {
+    width: 100%;
+    padding: 14px;
+    border-radius: 7px;
+    font-size: 0.85rem;
+    font-weight: 750;
+}
+
+.profile-state.error {
+    color: var(--sr-red);
+    background: rgba(200, 16, 46, 0.08);
+    border: 1px solid rgba(200, 16, 46, 0.16);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply animations to profile page */
+.profile-hero {
+    animation: slideDown 0.8s ease-out;
+}
+
+.hero-copy,
+.hero-panel {
+    animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+.profile-layout-container {
+    animation: slideUp 0.8s ease-out;
+}
+
+.profile-avatar-card,
+.profile-stats-card,
+.profile-action-card {
+    animation: slideUp 0.6s ease-out backwards;
+    transition: all 0.3s ease;
+}
+
+.profile-avatar-card {
+    animation-delay: 0.1s;
+}
+
+.profile-stats-card {
+    animation-delay: 0.2s;
+}
+
+.profile-action-card {
+    animation-delay: 0.3s;
+}
+
+.profile-avatar-card:hover,
+.profile-stats-card:hover,
+.profile-action-card:hover {
+    transform: translateY(-4px);
+}
+
+@media (max-width: 900px) {
+    .profile-hero,
+    .profile-layout-container {
+        width: min(100% - 28px, 720px);
+    }
+
+    .profile-hero {
+        grid-template-columns: 1fr;
+        padding: 28px;
+    }
+
+    .profile-hero .hero-panel {
+        max-width: 460px;
+    }
+
+    .profile-layout-container {
+        grid-template-columns: 1fr;
+    }
+
+    .rewards-rules-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 560px) {
+    .profile-hero {
+        margin-top: 24px;
+        padding: 24px 20px;
+        background:
+            linear-gradient(to right, var(--sr-green) 0 30%, #ffffff 30% 35%, var(--sr-gold) 35% 65%, #ffffff 65% 70%, var(--sr-red) 70% 100%) top / 100% 9px no-repeat,
+            linear-gradient(145deg, rgba(0, 95, 48, 0.98) 0 62%, rgba(200, 16, 46, 0.96) 62% 100%);
+    }
+
+    .profile-hero::after {
+        opacity: 0.42;
+    }
+
+    .profile-hero .hero-panel {
+        grid-template-columns: 1fr;
+    }
+
+    .profile-hero .hero-panel div {
+        min-height: 74px;
+    }
+
+    .profile-avatar-card,
+    .motivation-card,
+    .rewards-balance-card,
+    .rule-item {
+        padding: 24px 20px;
+    }
+
+    .rewards-balance-card {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .profile-details-list p {
+        flex-direction: column;
+        gap: 3px;
+    }
+}

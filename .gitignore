@@ -1,0 +1,10 @@
+# Ignore third-party dependency folders
+node_modules/
+
+# Ignore local environmental configuration variables (security/database keys)
+.env
+.env.local
+
+# Ignore OS specific metadata files
+.DS_Store
+Thumbs.db

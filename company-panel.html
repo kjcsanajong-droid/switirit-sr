@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwitiRit.SR - Bedrijfs Dashboard</title>
+    <link rel="stylesheet" href="css/company-panel.css">
+</head>
+<body>
+
+<nav class="main-nav">
+    <div class="nav-container">
+        <a href="index.html" class="brand-name">
+            <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
+        </a>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="beoordelen.html">Beoordelen</a>
+            <a href="dashboard-tct.html">TCT Dashboard</a>
+            <a href="company-panel.html" class="active">Bedrijfs Dashboard</a>
+            <a href="profile.html">Profiel</a>
+        </div>
+    </div>
+</nav>
+
+    <header class="fleet-hero">
+        <div class="hero-copy">
+            <span class="eyebrow">Operationeel centrum</span>
+            <h1 id="welcomeCompany">Welkom bij uw Vlootbeheer</h1>
+            <p>Registreer chauffeurs, koppel bussen aan routes en houd de dagelijkse operatie strak georganiseerd.</p>
+        </div>
+        <div class="hero-panel" aria-label="Vloot status overzicht">
+            <div>
+                <span class="stat-value">24/7</span>
+                <span class="stat-label">Beschikbaar</span>
+            </div>
+            <div>
+                <span class="stat-value">SR</span>
+                <span class="stat-label">Buslijnen</span>
+            </div>
+            <div>
+                <span class="stat-value">Live</span>
+                <span class="stat-label">Registratie</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="management-grid">
+        <section class="form-card driver-card">
+            <div class="card-heading">
+                <span class="card-icon">C</span>
+                <div>
+                    <h2>Chauffeur Toevoegen</h2>
+                    <p>Registreer een nieuwe geautoriseerde buschauffeur in het systeem.</p>
+                </div>
+            </div>
+            
+            <form id="addDriverForm">
+                <div class="form-group">
+                    <label for="driverFirstName">Voornaam:</label>
+                    <input type="text" id="driverFirstName" placeholder="Bijv. Sergino" required>
+                </div>
+                <div class="form-group">
+                    <label for="driverLastName">Achternaam:</label>
+                    <input type="text" id="driverLastName" placeholder="Bijv. Pinas" required>
+                </div>
+                <div class="form-group">
+                    <label for="driverLicense">Rijbewijs Nummer:</label>
+                    <input type="text" id="driverLicense" placeholder="Bijv. SUR-123456" required>
+                </div>
+                <div class="form-group">
+                    <label for="driverPhone">Telefoonnummer:</label>
+                    <input type="text" id="driverPhone" placeholder="Bijv. +597 888-8888">
+                </div>
+                <button type="submit" class="submit-btn submit-driver">Chauffeur Opslaan</button>
+            </form>
+        </section>
+
+        <section class="form-card bus-card">
+            <div class="card-heading">
+                <span class="card-icon">B</span>
+                <div>
+                    <h2>Bus Toevoegen</h2>
+                    <p>Koppel een fysiek voertuig aan een bestaande Surinaamse buslijn.</p>
+                </div>
+            </div>
+            
+            <form id="addBusForm">
+                <div class="form-group">
+                    <label for="busPlateNew">Kentekenplaat:</label>
+                    <input type="text" id="busPlateNew" placeholder="Bijv. PA 12-34" required>
+                </div>
+                <div class="form-group">
+                    <label for="busRouteSelect">Toegewezen Buslijn:</label>
+                    <select id="busRouteSelect" required>
+                        <option value="">Lijnen laden...</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="busStatus">Initiële Status:</label>
+                    <select id="busStatus">
+                        <option value="ACTIVE">Actief op de route</option>
+                        <option value="MAINTENANCE">In de garage (Onderhoud)</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-btn">Voertuig Registreren</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <p>&copy; Est. 2025 SwitiRit.SR. All rights reserved.</p>
+                <p class="owner-text">Ontwikkeld door Vision Five — Smart Traffic for a Brighter Future</p>
+            </div>
+            <div class="footer-logo-placeholder">
+                <img src="img/vision-five-logo.png" alt="Vision Five Logo" class="footer-logo-img">
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const driverForm = document.getElementById('addDriverForm');
+            const busForm = document.getElementById('addBusForm');
+
+            if (driverForm && typeof handleDriverSubmit === 'function') {
+                driverForm.addEventListener('submit', handleDriverSubmit);
+            }
+
+            if (busForm && typeof handleBusSubmit === 'function') {
+                busForm.addEventListener('submit', handleBusSubmit);
+            }
+        });
+    </script>
+</body>
+</html>
