@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwitiRit.SR - TCT Dashboard</title>
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="brand-name">
+                <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="beoordelen.html">Beoordelen</a>
+                <a href="dashboard-tct.html" class="active">TCT Dashboard</a>
+                <a href="company-panel.html">Bedrijfs Dashboard</a>
+                <a href="profile.html">Profiel</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="tct-hero">
+        <div class="hero-copy">
+            <span class="eyebrow">Toezicht & handhaving</span>
+            <h1>TCT Dashboard voor buskwaliteit en maatregelen</h1>
+            <p>Monitor binnenkomende reizigersfeedback, beoordeel risico's en registreer formele opvolging vanuit een centraal controlepaneel.</p>
+        </div>
+        <div class="hero-panel" aria-label="TCT operationeel overzicht">
+            <div>
+                <span class="stat-value">Live</span>
+                <span class="stat-label">Feedback</span>
+            </div>
+            <div>
+                <span class="stat-value">TCT</span>
+                <span class="stat-label">Toezicht</span>
+            </div>
+            <div>
+                <span class="stat-value">SRD</span>
+                <span class="stat-label">Sancties</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="dashboard-grid">
+        <section class="feedback-feed dashboard-card">
+            <div class="section-heading">
+                <span class="card-icon green">F</span>
+                <div>
+                    <span class="card-kicker">Live meldingen</span>
+                    <h2>Binnenkomende Bus Feedback</h2>
+                    <p>Nieuwe beoordelingen verschijnen hier zodra de database beschikbaar is.</p>
+                </div>
+            </div>
+            <div id="adminFeedbackContainer" class="feedback-stream">
+                <div class="state-message loading">Feedback ophalen uit de database...</div>
+            </div>
+        </section>
+
+        <section class="action-panel dashboard-card">
+            <div class="section-heading">
+                <span class="card-icon red">H</span>
+                <div>
+                    <span class="card-kicker">Wetgeving</span>
+                    <h2>Handhavingspaneel</h2>
+                    <p>Selecteer een feedback-ID om sancties of formele waarschuwingen op te leggen.</p>
+                </div>
+            </div>
+
+            <form id="enforcementForm">
+                <div class="form-grid-2">
+                    <div class="form-group">
+                        <label for="targetFeedbackId">Gekoppeld Feedback ID</label>
+                        <input type="number" id="targetFeedbackId" placeholder="Bijv. 1" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="fineAmount">Boete Bedrag (SRD)</label>
+                        <input type="number" id="fineAmount" value="0.00" min="0">
+                    </div>
+                </div>
+
+                  <div class="form-group">
+                   <label for="actionType">Maatregel / Sanctie Type</label>
+                      <select id="actionType">
+                        <option value="WARNING">1. Officiële Waarschuwing (max 3x)</option>
+                        <option value="FINE">2. Geldboete (max 2x)</option>
+                        <option value="SUSPENSION">3. Tijdelijke Schorsing (max 1x)</option>
+                        <option value="LICENSE_REVOKED">4. Intrekking Vergunning</option>
+        
+                        <option disabled>─────────────────────────</option>
+        
+                        <option value="POLICY_UPDATE">Beleidsaanpassing n.a.v. Suggestie</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="officialNotes">Officiele Toelichting & Grondslag Wetgeving</label>
+                    <textarea id="officialNotes" placeholder="Typ hier de wettelijke onderbouwing..." required></textarea>
+                </div>
+
+                <button type="submit" class="admin-btn">Maatregel Officieel Registreren</button>
+            </form>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <p>&copy; Est. 2025 SwitiRit.SR. All rights reserved.</p>
+                <p class="owner-text">Ontwikkeld door Vision Five - Smart Traffic for a Brighter Future</p>
+            </div>
+            <div class="footer-logo-placeholder">
+                <img src="img/vision-five-logo.png" alt="Vision Five Logo" class="footer-logo-img">
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

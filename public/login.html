@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inloggen | SwitiRit.SR</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body class="login-page-body">
+    <img src="img/vision-five-logo.png" alt="Vision Five Logo" class="top-right-logo">
+    
+    <div class="login-wrapper">
+        <div class="login-card">
+            
+            <div class="brand-header-badge">
+                <a href="index.html" class="brand-name">
+                    <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
+                </a>
+            </div>
+            
+            <div class="login-content">
+                <div class="welcome-message">
+                    <p>Welkom! Deze applicatie is gemaakt om de wensen van passagiers én buschauffeurs na te leven.</p>
+                </div>
+                
+                <form id="login-form" action="/api/login" method="post">
+                    <div class="form-field">
+                        <label for="email">E-mailadres</label>
+                        <input type="email" id="email" name="email" placeholder="E-mailadres" autocomplete="email" required>
+                    </div>
+                    <div class="form-field">
+                        <label for="password">Wachtwoord</label>
+                        <input type="password" id="password" name="password" placeholder="Wachtwoord" autocomplete="current-password" required>
+                    </div>
+                    <button type="submit" class="hero-button primary login-submit-btn">Inloggen</button>
+                </form>
+
+                <div class="login-button-grid">
+                    <a href="#" class="btn-secondary">Wachtwoord vergeten?</a>
+                    <a href="#" class="btn-secondary">Nieuw account aanmaken</a>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="login-footer">
+            <a href="index.html" class="bypass-link">→ Overslaan naar Dashboard (Test)</a>
+        </footer>
+    </div>
+</body>
+</html>

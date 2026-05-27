@@ -1,0 +1,222 @@
+/* login.css - Aligned with main.css design system */
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* 1. Base Body Layout */
+.login-page-body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: 
+        linear-gradient(135deg, rgba(0, 122, 61, 0.11), transparent 34%),
+        linear-gradient(315deg, rgba(200, 16, 46, 0.07), transparent 30%),
+        linear-gradient(180deg, rgba(252, 209, 22, 0.08), transparent 42%),
+        var(--sr-soft);
+    margin: 0;
+    padding: 20px;
+    position: relative;
+}
+
+/* 2. Top-Right Corner Logo Fix */
+.top-right-logo {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    max-height: 35px; /* Matches the exact scale of the footer logo on index.html */
+    width: auto;
+    opacity: 0.8;
+}
+
+/* 3. Login Box Container */
+.login-wrapper {
+    width: 100%;
+    max-width: 420px;
+}
+
+/* Specific styling to make the login button larger with a clean hover effect */
+.login-card .hero-button.primary {
+    width: 100%;
+    padding: 14px 20px;       /* Increases the vertical and horizontal inner space */
+    font-size: 1.05rem;       /* Makes the text slightly larger and easier to read */
+    border: none;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover state matching the index.html design language */
+.login-card .hero-button.primary:hover {
+    background-color: #e5bd12; /* A slightly darker gold/yellow for clear feedback */
+    transform: translateY(-2px); /* Subtle lift effect when hovered */
+    box-shadow: 0 16px 30px rgba(252, 209, 22, 0.3); /* Stronger glow on hover */
+}
+
+/* Active click state for a realistic button press feel */
+.login-card .hero-button.primary:active {
+    transform: translateY(0); /* Pushes the button back down when clicked */
+
+}
+
+/* 4. SwitiRit.SR Visibility Enhancement Block */
+.brand-header-badge {
+    background: rgba(0, 95, 48, 0.96); /* Reuses the main-nav green for brand identity */
+    padding: 24px;
+    text-align: center;
+    border-bottom: 4px solid var(--sr-gold); /* Incorporates the signature gold line style */
+}
+
+/* Enforce distinct font scaling for the header login title block */
+.brand-header-badge .brand-name {
+    font-size: 1.8rem;
+    justify-content: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    display: inline-flex;
+}
+
+.brand-header-badge .brand-name:hover {
+    opacity: 0.8;
+}
+
+.login-content {
+    padding: 30px;
+}
+
+.welcome-message {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+/* 5. Input Fields Styling */
+#login-form input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 16px;
+    border: 1px solid var(--sr-line);
+    border-radius: 6px;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: border-color 0.2s;
+}
+
+#login-form input:focus {
+    outline: none;
+    border-color: var(--sr-green);
+}
+
+.login-submit-btn {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+}
+
+/* 6. Navigation Link Options Grid */
+.login-button-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-secondary {
+    text-decoration: none;
+    color: var(--sr-muted);
+    font-size: 0.85rem;
+    text-align: center;
+    transition: color 0.2s;
+}
+
+.btn-secondary:hover {
+    color: var(--sr-green);
+}
+
+.login-footer {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.bypass-link {
+    text-decoration: none;
+    color: var(--sr-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.bypass-link:hover {
+    color: var(--sr-red);
+}
+
+/* ========== ANIMATIONS ========== */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Apply animations to login page */
+.login-card {
+    animation: slideUp 0.8s ease-out;
+}
+
+.brand-header-badge {
+    animation: slideDown 0.6s ease-out;
+}
+
+.login-content {
+    animation: fadeIn 0.8s ease-out 0.2s both;
+}
+
+.login-button-grid {
+    animation: slideUp 0.6s ease-out 0.3s both;
+}
+
+.login-submit-btn {
+    transition: all 0.3s ease;
+}
+
+.login-submit-btn:hover {
+    transform: translateY(-3px);
+}
+
+/* Responsive Scaling for smaller screens */
+@media (max-width: 480px) {
+    .top-right-logo {
+        position: static;
+        margin-bottom: 20px;
+    }
+    
+    .login-page-body {
+        justify-content: flex-start;
+        padding-top: 40px;
+    }
+}

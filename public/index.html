@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwitiRit.SR - Home</title>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="index.html" class="brand-name">
+                <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html" class="active">Home</a>
+                <a href="beoordelen.html">Beoordelen</a>
+                <a href="dashboard-tct.html">TCT Dashboard</a>
+                <a href="company-panel.html">Bedrijfs Dashboard</a>
+                <a href="profile.html">Profiel</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-banner">
+        <div class="hero-overlay">
+            <span class="eyebrow">Openbaar vervoer Suriname</span>
+            <h1>Veilig en comfortabel reizen door Suriname</h1>
+            <p>Bekijk actuele buslijnen, trajecten en operationele status voor Paramaribo en omliggende districten.</p>
+        </div>
+        <div class="hero-status" aria-label="Service overzicht">
+            <div>
+                <span class="stat-value">Live</span>
+                <span class="stat-label">Routes</span>
+            </div>
+            <div>
+                <span class="stat-value">SR</span>
+                <span class="stat-label">Districten</span>
+            </div>
+            <div>
+                <span class="stat-value">24/7</span>
+                <span class="stat-label">Inzicht</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="content-container">
+        <section class="schedule-section" id="dienstregeling">
+            <div class="section-heading">
+                <span class="eyebrow dark">Dienstregeling</span>
+                <h2>Officiele Buslijnen & Trajecten</h2>
+                <p>Controleer welke lijnen operationeel zijn en welke bestemmingen zij bedienen.</p>
+            </div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Lijn / Traject</th>
+                            <th>Bestemming Trajectbeschrijving</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dynamicRoutesTable">
+                        <tr>
+                            <td colspan="3"><div class="table-message loading">Dienstregeling laden vanuit database...</div></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <p>&copy; Est. 2025 SwitiRit.SR. All rights reserved.</p>
+                <p class="owner-text">Ontwikkeld door Vision Five - Smart Traffic for a Brighter Future</p>
+            </div>
+            <div class="footer-logo-placeholder">
+                <img src="img/vision-five-logo.png" alt="Vision Five Logo" class="footer-logo-img">
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -13,7 +13,16 @@ Een webapplicatie voor passagiers en buschauffeurs om feedback te geven over bus
 - JSON Web Tokens (`jsonwebtoken`)
 - bcrypt
 - CORS
+- dotenv
 - Vanilla HTML/CSS/JavaScript
+
+## Project structure
+- `server.js` - Backend entry point
+- `routes/` - API route modules
+- `middlewares/` - Authentication and validation logic
+- `config/db.js` - Database connection pool configuration
+- `sql/schema.sql` - Database creation and seed data
+- `public/` - Frontend assets and HTML pages
 
 ## Requirements
 - Node.js 18+ of hoger
@@ -37,16 +46,16 @@ Een webapplicatie voor passagiers en buschauffeurs om feedback te geven over bus
 
 ## Setting up the database
 1. Maak een database genaamd `switirit_db` in MySQL.
-2. Importeer de SQL-schema in `SwitiRit.sr sql.sql`:
+2. Importeer het SQL-schema in `sql/schema.sql`:
    ```bash
-   mysql -u root -p switirit_db < "SwitiRit.sr sql.sql"
+   mysql -u root -p switirit_db < "sql/schema.sql"
    ```
 3. Pas eventueel de `DB_PASSWORD` en andere instellingen in `.env` aan.
 
 ## Usage
-- Open de front-end bestanden in een browser of gebruik een statische server.
-- De backend API draait op `http://localhost:5000`.
-- De front-end kan `index.html`, `login.html`, `profile.html` en andere pagina's gebruiken.
+- Gebruik `npm start` om de server te starten.
+- Open de applicatie in een browser op `http://localhost:5000`.
+- De frontend-pagina's en assets worden geladen vanuit de `public/` map.
 
 ## Notes
 - Zorg ervoor dat de folder `node_modules` NIET wordt opgenomen in de inzending.
