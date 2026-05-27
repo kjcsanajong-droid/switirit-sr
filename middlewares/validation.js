@@ -1,56 +1,62 @@
-function validateLogin(req, res, next) {
-    const { email, password } = req.body;
+const { body, validationResult } = require('express-validator');
 
-    if (!email || typeof email !== 'string' || !email.includes('@')) {
-        return res.status(400).json({ message: 'Ongeldig e-mailadres.' });
+const validateRequest = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
     }
-
-    if (!password || typeof password !== 'string' || password.length < 6) {
-        return res.status(400).json({ message: 'Wachtwoord moet minimaal 6 tekens bevatten.' });
-    }
-
     next();
-}
+};
 
-function validateFeedback(req, res, next) {
-    const { user_id, route_id, bus_plate, driving, comfort, hygiene, airco } = req.body;
+const validateLogin = [
+    body('email')
+        .exists({ checkFalsy: true }).withMessage('E-mailadres is verplicht.')
+        .isString().withMessage('E-mailadres moet tekst zijn.')
+        .isEmail().withMessage('Ongeldig e-mailadres formaat.'),
+    body('password')
+        .exists({ checkFalsy: true }).withMessage('Wachtwoord is verplicht.')
+        .isString().withMessage('Wachtwoord moet tekst zijn.')
+        .isLength({ min: 6 }).withMessage('Wachtwoord moet minimaal 6 tekens bevatten.'),
+    validateRequest
+];
 
-    if (!user_id || !route_id || !bus_plate) {
-        return res.status(400).json({ message: 'Vereiste velden ontbreken: user_id, route_id of bus_plate.' });
-    }
+const validateFeedback = [
+    body('user_id')
+        .exists().withMessage('user_id is verplicht.')
+        .isInt({ min: 1 }).withMessage('user_id moet een positief geheel getal zijn.'),
+    body('route_id')
+        .exists().withMessage('route_id is verplicht.')
+        .isInt({ min: 1 }).withMessage('route_id moet een positief geheel getal zijn.'),
+    body('bus_plate')
+        .exists({ checkFalsy: true }).withMessage('bus_plate is verplicht.')
+        .isString().withMessage('bus_plate moet tekst zijn.'),
+    body('driving')
+        .exists().withMessage('driving is verplicht.')
+        .isInt({ min: 1, max: 5 }).withMessage('driving moet tussen 1 en 5 zijn.'),
+    body('comfort')
+        .exists().withMessage('comfort is verplicht.')
+        .isInt({ min: 1, max: 5 }).withMessage('comfort moet tussen 1 en 5 zijn.'),
+    body('hygiene')
+        .exists().withMessage('hygiene is verplicht.')
+        .isInt({ min: 1, max: 5 }).withMessage('hygiene moet tussen 1 en 5 zijn.'),
+    body('airco')
+        .exists({ checkFalsy: true }).withMessage('airco is verplicht.')
+        .isString().withMessage('airco moet tekst zijn.')
+        .custom((value) => ['JA', 'NEE', 'GEEN'].includes(String(value).toUpperCase()))
+        .withMessage('airco moet JA, NEE of GEEN zijn.'),
+    validateRequest
+];
 
-    if (![1, 2, 3, 4, 5].includes(Number(driving))) {
-        return res.status(400).json({ message: 'Rijgedrag moet een waarde tussen 1 en 5 zijn.' });
-    }
-
-    if (![1, 2, 3, 4, 5].includes(Number(comfort))) {
-        return res.status(400).json({ message: 'Comfort moet een waarde tussen 1 en 5 zijn.' });
-    }
-
-    if (![1, 2, 3, 4, 5].includes(Number(hygiene))) {
-        return res.status(400).json({ message: 'Hygiëne moet een waarde tussen 1 en 5 zijn.' });
-    }
-
-    if (!['JA', 'NEE', 'GEEN'].includes(String(airco).toUpperCase())) {
-        return res.status(400).json({ message: 'Airco-veld moet JA, NEE of GEEN zijn.' });
-    }
-
-    next();
-}
-
-function validateEnforcement(req, res, next) {
-    const { feedback_id, action_type } = req.body;
-
-    if (!feedback_id || !action_type) {
-        return res.status(400).json({ message: 'Vereiste velden ontbreken: feedback_id of action_type.' });
-    }
-
-    if (!['WARNING', 'FINE', 'POLICY_UPDATE', 'LICENSE_REVOKED'].includes(action_type)) {
-        return res.status(400).json({ message: 'Ongeldig actie-type.' });
-    }
-
-    next();
-}
+const validateEnforcement = [
+    body('feedback_id')
+        .exists().withMessage('feedback_id is verplicht.')
+        .isInt({ min: 1 }).withMessage('feedback_id moet een positief geheel getal zijn.'),
+    body('action_type')
+        .exists({ checkFalsy: true }).withMessage('action_type is verplicht.')
+        .isIn(['WARNING', 'FINE', 'POLICY_UPDATE', 'LICENSE_REVOKED'])
+        .withMessage('Ongeldig actie-type.'),
+    validateRequest
+];
 
 module.exports = {
     validateLogin,
