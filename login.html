@@ -14,9 +14,9 @@
         <div class="login-card">
             
             <div class="brand-header-badge">
-                <a href="index.html" class="brand-name">
+                <h1 class="brand-name">
                     <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
-                </a>
+                </h1>
             </div>
             
             <div class="login-content">
@@ -24,29 +24,91 @@
                     <p>Welkom! Deze applicatie is gemaakt om de wensen van passagiers én buschauffeurs na te leven.</p>
                 </div>
                 
-                <form id="login-form" action="/api/login" method="post">
-                    <div class="form-field">
-                        <label for="email">E-mailadres</label>
-                        <input type="email" id="email" name="email" placeholder="E-mailadres" autocomplete="email" required>
-                    </div>
-                    <div class="form-field">
-                        <label for="password">Wachtwoord</label>
-                        <input type="password" id="password" name="password" placeholder="Wachtwoord" autocomplete="current-password" required>
-                    </div>
+                <form id="login-form">
+                    <input type="email" id="email" placeholder="E-mailadres" required>
+                    <input type="password" id="password" placeholder="Wachtwoord" required>
                     <button type="submit" class="hero-button primary login-submit-btn">Inloggen</button>
                 </form>
 
+                <div class="login-divider" style="text-align: center; margin: 20px 0; color: #999;">
+                    <span>— of —</span>
+                </div>
+
+                <div class="quick-login-section" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-bottom: 20px;">
+                    <button type="button" class="hero-button secondary quick-login-btn" data-user-id="4" data-role="PASSENGER">
+                        👤 Passagier Test
+                    </button>
+                    <button type="button" class="hero-button secondary quick-login-btn" data-user-id="6" data-role="COMPANY">
+                        🚌 Bedrijf Test
+                    </button>
+                    <button type="button" class="hero-button secondary quick-login-btn" data-user-id="3" data-role="MINISTRY">
+                        📋 Wetgeving Test
+                    </button>
+                </div>
+
                 <div class="login-button-grid">
+                    <a href="signup.html" class="btn-secondary">Nieuw account aanmaken</a>
                     <a href="#" class="btn-secondary">Wachtwoord vergeten?</a>
-                    <a href="#" class="btn-secondary">Nieuw account aanmaken</a>
                 </div>
             </div>
 
         </div>
 
         <footer class="login-footer">
-            <a href="index.html" class="bypass-link">→ Overslaan naar Dashboard (Test)</a>
+            <a href="#" class="bypass-link">→ Overslaan naar Dashboard (Test)</a>
         </footer>
     </div>
+
+    <script>
+        // Regular login form handler
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    sessionStorage.setItem('userId', data.user.user_id);
+                    sessionStorage.setItem('userRole', data.user.role);
+                    window.location.href = 'index.html';
+                } else {
+                    alert(data.message || 'Inloggen mislukt');
+                }
+            } catch (err) {
+                alert('Verbindingsfout bij inloggen');
+                console.error(err);
+            }
+        });
+
+        // Quick login buttons
+        document.querySelectorAll('.quick-login-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const userId = btn.dataset.userId;
+                const role = btn.dataset.role;
+                
+                sessionStorage.setItem('userId', userId);
+                sessionStorage.setItem('userRole', role);
+                window.location.href = 'index.html';
+            });
+        });
+
+        // Bypass link
+        document.querySelector('.bypass-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.setItem('userId', '2');
+            sessionStorage.setItem('userRole', 'SUPERADMIN');
+            window.location.href = 'index.html';
+        });
+    </script>
 </body>
 </html>

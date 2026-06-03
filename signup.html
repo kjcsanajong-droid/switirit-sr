@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Aanmaken | SwitiRit.SR</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/signup.css">
+</head>
+<body class="signup-page-body">
+    <img src="img/vision-five-logo.png" alt="Vision Five Logo" class="top-right-logo">
+    
+    <div class="signup-wrapper">
+        <div class="signup-card">
+            
+            <div class="brand-header-badge">
+                <h1 class="brand-name">
+                    <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
+                </h1>
+            </div>
+            
+            <div class="signup-content">
+                <div class="welcome-message">
+                    <p>Welkom! Word lid van Surinames slimste vervoersnetwerk.</p>
+                </div>
+
+                <div class="benefits-banner">
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🎯</span>
+                        <div>
+                            <strong>1 Coin per beoordeling</strong>
+                            <p>Verdien coins met elke ritbeoordeling</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">🚌</span>
+                        <div>
+                            <strong>100 Coins = Gratis rit</strong>
+                            <p>Spaar en geniet van gratis reizen</p>
+                        </div>
+                    </div>
+                    <div class="benefit-item">
+                        <span class="benefit-icon">⭐</span>
+                        <div>
+                            <strong>Vervoer verbeteren</strong>
+                            <p>Uw stem bepaalt de kwaliteit</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <form id="signup-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="firstName">Voornaam</label>
+                            <input type="text" id="firstName" placeholder="Uw voornaam" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="lastName">Achternaam</label>
+                            <input type="text" id="lastName" placeholder="Uw achternaam" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">E-mailadres</label>
+                        <input type="email" id="email" placeholder="uw@email.com" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Wachtwoord</label>
+                        <input type="password" id="password" placeholder="Minimaal 6 karakters" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="confirmPassword">Bevestig Wachtwoord</label>
+                        <input type="password" id="confirmPassword" placeholder="Herhaal uw wachtwoord" required>
+                    </div>
+
+                    <div class="account-type-section">
+                        <label>Account Type</label>
+                        <div class="account-type-options">
+                            <label class="account-option">
+                                <input type="radio" name="accountType" value="PASSENGER" checked>
+                                <span class="option-label">👤 Passagier</span>
+                                <span class="option-desc">Reizen en punten verzamelen</span>
+                            </label>
+                            <label class="account-option">
+                                <input type="radio" name="accountType" value="COMPANY">
+                                <span class="option-label">🚌 Busmaatschappij</span>
+                                <span class="option-desc">Beheer uw vloot</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="hero-button primary signup-submit-btn">Account Aanmaken</button>
+                </form>
+
+                <div class="login-redirect">
+                    <p>Al een account? <a href="login.html">Inloggen</a></p>
+                </div>
+            </div>
+
+        </div>
+
+        <footer class="signup-footer">
+            <a href="index.html" class="bypass-link">← Terug naar Home</a>
+        </footer>
+    </div>
+
+    <script>
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const firstName = document.getElementById('firstName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const accountType = document.querySelector('input[name="accountType"]:checked').value;
+
+            // Validation
+            if (!firstName || !lastName) {
+                alert('Vul alstublieft uw voor- en achternaam in');
+                return;
+            }
+
+            if (password.length < 6) {
+                alert('Wachtwoord moet minimaal 6 karakters lang zijn');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                alert('Wachtwoorden komen niet overeen');
+                return;
+            }
+
+            try {
+                const response = await fetch('http://localhost:5000/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        firstName, 
+                        lastName, 
+                        email, 
+                        password,
+                        role: accountType 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    alert('Account succesvol aangemaakt! U kunt nu inloggen.');
+                    window.location.href = 'login.html';
+                } else {
+                    alert(data.message || 'Er is een fout opgetreden bij het aanmaken van het account');
+                }
+            } catch (err) {
+                alert('Verbindingsfout bij registratie');
+                console.error(err);
+            }
+        });
+    </script>
+</body>
+</html>

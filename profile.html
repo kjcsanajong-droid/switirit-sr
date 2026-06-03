@@ -10,9 +10,9 @@
 <body>
     <nav class="main-nav">
         <div class="nav-container">
-            <a href="index.html" class="brand-name">
+            <div class="brand-name">
                 <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
-            </a>
+            </div>
             <div class="nav-links">
                 <a href="index.html">Home</a>
                 <a href="beoordelen.html">Beoordelen</a>
@@ -70,13 +70,13 @@
         </aside>
 
         <section class="profile-main-content">
-            <section class="motivation-card">
+            <section class="motivation-card" id="motivationSection">
                 <span class="card-kicker">Blijf beoordelen</span>
                 <h2>Elke ritbeoordeling maakt vervoer slimmer</h2>
                 <p>Verzamel punten bij elke rit die u maakt. Uw beoordelingen helpen de kwaliteit van transport in Suriname te verbeteren en leveren direct voordeel op.</p>
             </section>
 
-            <section class="rewards-balance-card">
+            <section class="rewards-balance-card" id="coinsSection">
                 <div>
                     <span class="card-kicker dark">Jouw Saldo</span>
                     <h2>Switi Coins</h2>
@@ -87,7 +87,7 @@
                 </div>
             </section>
 
-            <section class="rewards-rules-grid" aria-label="Beloningsregels">
+            <section class="rewards-rules-grid" id="rewardsRulesSection" aria-label="Beloningsregels">
                 <article class="rule-item">
                     <span class="rule-number">1</span>
                     <h3>De Gulden Regel</h3>
@@ -119,19 +119,27 @@
 
     <script src="js/app.js"></script>
     <script>
-        setTimeout(async () => {
+        async function loadProfileData() {
             try {
-                const userId = sessionContext?.userId || parseInt(sessionStorage.getItem('userId')) || 1;
+                const userId = parseInt(sessionStorage.getItem('userId')) || 1;
+                const userRole = sessionStorage.getItem('userRole') || 'PASSENGER';
+
+                console.log(`🔍 Profile: Fetching data for userId: ${userId}, role: ${userRole}`);
 
                 const response = await fetch(`http://localhost:5000/api/user/profile`, {
                     headers: { 'x-user-id': userId.toString() }
                 });
 
+                console.log(`📡 Profile: Server response status: ${response.status}`);
+                const responseText = await response.text();
+                console.log(`📡 Profile: Server response body: ${responseText}`);
+
                 if (!response.ok) {
-                    throw new Error(`Server fout: ${response.status}`);
+                    throw new Error(`Server fout: ${response.status} - ${responseText}`);
                 }
 
-                const user = await response.json();
+                const user = JSON.parse(responseText);
+                console.log(`✅ Profile: User data received:`, user);
 
                 document.getElementById('userName').innerText = `${user.first_name} ${user.last_name}`;
                 document.getElementById('userEmail').innerText = user.email;
@@ -141,11 +149,24 @@
 
                 const initials = `${user.first_name?.[0] || 'S'}${user.last_name?.[0] || 'R'}`.toUpperCase();
                 document.getElementById('userAvatar').innerText = initials;
+
+                console.log(`✅ Profile: Data loaded successfully`);
+
+                // Hide rewards sections for non-PASSENGER users
+                if (userRole !== 'PASSENGER') {
+                    const motivationSection = document.getElementById('motivationSection');
+                    const coinsSection = document.getElementById('coinsSection');
+                    const rewardsRulesSection = document.getElementById('rewardsRulesSection');
+                    
+                    if (motivationSection) motivationSection.style.display = 'none';
+                    if (coinsSection) coinsSection.style.display = 'none';
+                    if (rewardsRulesSection) rewardsRulesSection.style.display = 'none';
+                }
             } catch (error) {
-                console.error('Fout bij het laden van profiel:', error);
+                console.error('❌ Fout bij het laden van profiel:', error);
                 document.getElementById('profileContent').innerHTML = `
-                    <div class="profile-state error">
-                        Laden mislukt. Controleer de backend verbinding.
+                    <div class="profile-state error" style="padding: 20px; background: #fee; border: 1px solid #fcc; border-radius: 4px; color: #c00;">
+                        <strong>Fout bij laden:</strong> ${error.message}
                     </div>
                 `;
             }
@@ -160,7 +181,14 @@
             document.getElementById('editProfileBtn').addEventListener('click', () => {
                 alert('Profiel bewerken functionaliteit kan hier worden gekoppeld.');
             });
-        }, 100);
+        }
+
+        // Run immediately if DOM is ready, otherwise wait
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadProfileData);
+        } else {
+            loadProfileData();
+        }
     </script>
 </body>
 </html>

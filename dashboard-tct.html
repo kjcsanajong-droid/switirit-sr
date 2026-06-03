@@ -9,9 +9,9 @@
 <body>
     <nav class="main-nav">
         <div class="nav-container">
-            <a href="index.html" class="brand-name">
+            <div class="brand-name">
                 <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
-            </a>
+            </div>
             <div class="nav-links">
                 <a href="index.html">Home</a>
                 <a href="beoordelen.html">Beoordelen</a>
@@ -82,17 +82,13 @@
                     </div>
                 </div>
 
-                  <div class="form-group">
-                   <label for="actionType">Maatregel / Sanctie Type</label>
-                      <select id="actionType">
-                        <option value="WARNING">1. Officiële Waarschuwing (max 3x)</option>
-                        <option value="FINE">2. Geldboete (max 2x)</option>
-                        <option value="SUSPENSION">3. Tijdelijke Schorsing (max 1x)</option>
-                        <option value="LICENSE_REVOKED">4. Intrekking Vergunning</option>
-        
-                        <option disabled>─────────────────────────</option>
-        
+                <div class="form-group">
+                    <label for="actionType">Maatregel / Sanctie Type</label>
+                    <select id="actionType">
+                        <option value="WARNING">Formele Waarschuwing (Chauffeur/Bedrijf)</option>
+                        <option value="FINE">Geldboete Opleggen (SRD)</option>
                         <option value="POLICY_UPDATE">Beleidsaanpassing n.a.v. Suggestie</option>
+                        <option value="LICENSE_REVOKED">Intrekking Vergunning Traject</option>
                     </select>
                 </div>
 

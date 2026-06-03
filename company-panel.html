@@ -10,9 +10,9 @@
 
 <nav class="main-nav">
     <div class="nav-container">
-        <a href="index.html" class="brand-name">
+        <div class="brand-name">
             <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
-        </a>
+        </div>
         <div class="nav-links">
             <a href="index.html">Home</a>
             <a href="beoordelen.html">Beoordelen</a>
@@ -108,6 +108,34 @@
         </section>
     </main>
 
+    <!-- Outstanding Fees Section -->
+    <section class="outstanding-fees-section">
+        <div class="fees-container">
+            <div class="fees-header">
+                <h2>⚠️ Openstaande Boetes - Vlootoverzicht</h2>
+                <p>Bekijk alle geldboetes voor uw voertuigen</p>
+            </div>
+            <div id="outstandingFeesContainer" class="fees-table-wrapper">
+                <table class="fees-table">
+                    <thead>
+                        <tr>
+                            <th>Kentekenplaat</th>
+                            <th>Route</th>
+                            <th>Status</th>
+                            <th>Openstaande Boete</th>
+                            <th>Waarschuwingen</th>
+                        </tr>
+                    </thead>
+                    <tbody id="feesTableBody">
+                        <tr style="text-align: center; color: #999;">
+                            <td colspan="5">Gegevens laden...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
     <footer class="main-footer">
         <div class="footer-content">
             <div class="footer-branding">
@@ -133,7 +161,109 @@
             if (busForm && typeof handleBusSubmit === 'function') {
                 busForm.addEventListener('submit', handleBusSubmit);
             }
+
+            // Load outstanding fees
+            loadOutstandingFees();
         });
+
+        // Function to load outstanding fees for company buses
+        async function loadOutstandingFees() {
+            const feesTableBody = document.getElementById('feesTableBody');
+            const companyId = sessionContext.userId;
+
+            try {
+                const response = await fetch(`http://localhost:5000/api/company/fees/${companyId}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    feesTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #999; padding: 20px;">Fout bij laden: ${data.error}</td></tr>`;
+                    return;
+                }
+
+                if (!data.buses || data.buses.length === 0) {
+                    feesTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #999; padding: 20px;">Geen bussen gevonden</td></tr>`;
+                    return;
+                }
+
+                feesTableBody.innerHTML = '';
+                let totalFees = 0;
+
+                data.buses.forEach(bus => {
+                    const outstandingFee = bus.outstanding_fee || 0;
+                    totalFees += parseFloat(outstandingFee);
+
+                    // Determine status badge
+                    const statusClass = bus.current_status === 'ACTIVE' ? 'status-active' : 
+                                       bus.current_status === 'MAINTENANCE' ? 'status-maintenance' : 'status-suspended';
+                    const statusLabel = bus.current_status === 'ACTIVE' ? 'Actief' :
+                                       bus.current_status === 'MAINTENANCE' ? 'Onderhoud' : 'Geschorst';
+
+                    // Determine fee styling
+                    const feeClass = outstandingFee > 0 ? 'fee-amount high' : 'fee-amount zero';
+                    const feeDisplay = outstandingFee > 0 ? `SRD ${parseFloat(outstandingFee).toFixed(2)}` : 'Geen boetes';
+
+                    // Determine warnings
+                    const warnings = bus.warning_count || 0;
+                    const warningsHTML = warnings > 0 
+                        ? `<span class="warning-badge">${warnings} waarschuwing${warnings > 1 ? 'en' : ''}</span>`
+                        : `<span class="warning-badge no-warnings">Geen waarschuwingen</span>`;
+
+                    // Add alert style for high fees
+                    const rowStyle = outstandingFee > 0 ? 'background: rgba(200, 16, 46, 0.05);' : '';
+
+                    const row = `
+                        <tr style="${rowStyle}">
+                            <td><strong>${bus.plate_number}</strong></td>
+                            <td>${bus.route_name || 'N/B'}</td>
+                            <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                            <td><span class="${feeClass}">${feeDisplay}</span></td>
+                            <td>${warningsHTML}</td>
+                        </tr>
+                    `;
+                    feesTableBody.innerHTML += row;
+                });
+
+                // Add total row
+                if (totalFees > 0) {
+                    const totalRow = `
+                        <tr style="background: rgba(200, 16, 46, 0.08); font-weight: 700; border-top: 2px solid var(--sr-red);">
+                            <td colspan="3" style="text-align: right;"><strong>Totaal Openstaande Boetes:</strong></td>
+                            <td><span class="fee-amount high">SRD ${totalFees.toFixed(2)}</span></td>
+                            <td></td>
+                        </tr>
+                    `;
+                    feesTableBody.innerHTML += totalRow;
+
+                    // Show alert if there are fees
+                    showFeeAlert(totalFees);
+                }
+
+            } catch (err) {
+                console.error('Fout bij laden openstaande boetes:', err);
+                feesTableBody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red; padding: 20px;">Kon gegevens niet laden. Zorg dat de server draait.</td></tr>`;
+            }
+        }
+
+        // Function to show fee alert
+        function showFeeAlert(totalFees) {
+            const alert = document.createElement('div');
+            alert.style.cssText = `
+                background: rgba(200, 16, 46, 0.1);
+                border-left: 5px solid var(--sr-red);
+                border-radius: 4px;
+                padding: 16px;
+                margin-bottom: 20px;
+                color: var(--sr-red);
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            `;
+            alert.innerHTML = `<span style="font-size: 1.5rem;">⚠️</span><span>U hebt SRD ${totalFees.toFixed(2)} aan openstaande boetes!</span>`;
+
+            const feesContainer = document.querySelector('.fees-container');
+            feesContainer.insertBefore(alert, feesContainer.firstChild);
+        }
     </script>
 </body>
 </html>

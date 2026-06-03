@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel | SwitiRit.SR</title>
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/admin-panel.css">
+</head>
+<body>
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="brand-name">
+                <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="admin-panel.html" class="active">Admin Panel</a>
+                <a href="profile.html">Profiel</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="admin-container">
+        <div class="admin-header">
+            <h1>🔐 Admin Control Panel</h1>
+            <p>Beheer gebruikersrollen en systeemrechten</p>
+        </div>
+
+        <div class="admin-grid">
+            <!-- User Management Section -->
+            <section class="admin-card">
+                <div class="card-header">
+                    <h2>👥 Gebruikersbeheer</h2>
+                    <p>Wijzig gebruikersrollen en permissies</p>
+                </div>
+
+                <div class="user-search">
+                    <input type="text" id="userSearchInput" placeholder="Zoek op naam of email..." class="search-input">
+                </div>
+
+                <div class="user-list-container">
+                    <div id="usersList" class="users-table">
+                        <div class="loading">Gebruikers laden...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Role Statistics -->
+            <section class="admin-card statistics-card">
+                <div class="card-header">
+                    <h2>📊 Statistieken</h2>
+                </div>
+
+                <div id="roleStats" class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-icon">👤</span>
+                        <div>
+                            <span class="stat-label">Passagiers</span>
+                            <span class="stat-value" id="passengerCount">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🚌</span>
+                        <div>
+                            <span class="stat-label">Bedrijven</span>
+                            <span class="stat-value" id="companyCount">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">👮</span>
+                        <div>
+                            <span class="stat-label">Ministry</span>
+                            <span class="stat-value" id="ministryCount">0</span>
+                        </div>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-icon">🔐</span>
+                        <div>
+                            <span class="stat-label">Admins</span>
+                            <span class="stat-value" id="superadminCount">0</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="admin-card actions-card">
+                <div class="card-header">
+                    <h2>⚡ Snelle Acties</h2>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="exportUserData()">
+                        📥 Exporteer Gebruikersdata
+                    </button>
+                    <button class="action-btn" onclick="showBulkRoleChange()">
+                        🔄 Bulk Rol Wijzigen
+                    </button>
+                    <button class="action-btn logout-btn" onclick="logoutAdmin()">
+                        🚪 Afmelden
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Modal for Role Change -->
+    <div id="roleChangeModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Rol Wijzigen</h3>
+                <button class="modal-close" onclick="closeRoleChangeModal()">✕</button>
+            </div>
+
+            <div class="modal-body">
+                <div id="userInfo" class="user-info">
+                    <!-- User info will be populated here -->
+                </div>
+
+                <div class="role-selection">
+                    <label>Nieuwe Rol:</label>
+                    <select id="newRoleSelect" class="role-select">
+                        <option value="">-- Selecteer Rol --</option>
+                        <option value="PASSENGER">👤 Passagier</option>
+                        <option value="COMPANY">🚌 Bedrijf</option>
+                        <option value="MINISTRY">👮 Ministry</option>
+                        <option value="SUPERADMIN">🔐 Superadmin</option>
+                    </select>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="confirmRoleChange()">Wijzigen</button>
+                    <button class="btn-secondary" onclick="closeRoleChangeModal()">Annuleren</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-branding">
+                <p>&copy; Est. 2025 SwitiRit.SR - Admin Panel. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let allUsers = [];
+        let selectedUserForChange = null;
+
+        // Check if user is SUPERADMIN
+        window.addEventListener('load', () => {
+            const userRole = sessionStorage.getItem('userRole') || 'PASSENGER';
+            if (userRole !== 'SUPERADMIN') {
+                alert('Toegang geweigerd: Alleen SUPERADMIN kan deze pagina bezoeken');
+                window.location.href = 'index.html';
+            }
+            loadUsers();
+        });
+
+        // Load all users
+        async function loadUsers() {
+            try {
+                const response = await fetch('http://localhost:5000/api/users');
+                allUsers = await response.json();
+                renderUsers(allUsers);
+                updateStatistics();
+            } catch (err) {
+                console.error('Fout bij laden gebruikers:', err);
+                document.getElementById('usersList').innerHTML = '<div class="error">Fout bij laden gebruikers</div>';
+            }
+        }
+
+        // Render users table
+        function renderUsers(users) {
+            const usersList = document.getElementById('usersList');
+            
+            if (users.length === 0) {
+                usersList.innerHTML = '<div class="empty">Geen gebruikers gevonden</div>';
+                return;
+            }
+
+            const rolesMap = {
+                'PASSENGER': '👤 Passagier',
+                'COMPANY': '🚌 Bedrijf',
+                'MINISTRY': '👮 Ministry',
+                'SUPERADMIN': '🔐 Superadmin'
+            };
+
+            usersList.innerHTML = users.map(user => `
+                <div class="user-row">
+                    <div class="user-info-display">
+                        <div class="user-avatar">${user.first_name[0]}${user.last_name[0]}</div>
+                        <div class="user-details">
+                            <div class="user-name">${user.first_name} ${user.last_name}</div>
+                            <div class="user-email">${user.email}</div>
+                        </div>
+                    </div>
+                    <div class="user-role-display">
+                        <span class="role-badge role-${user.role.toLowerCase()}">${rolesMap[user.role]}</span>
+                    </div>
+                    <div class="user-actions">
+                        <button class="btn-edit" onclick="openRoleChangeModal(${user.user_id}, '${user.first_name} ${user.last_name}', '${user.role}')">
+                            Wijzigen
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Search users
+        document.getElementById('userSearchInput').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filtered = allUsers.filter(user => 
+                user.first_name.toLowerCase().includes(searchTerm) ||
+                user.last_name.toLowerCase().includes(searchTerm) ||
+                user.email.toLowerCase().includes(searchTerm)
+            );
+            renderUsers(filtered);
+        });
+
+        // Update statistics
+        function updateStatistics() {
+            const stats = {
+                PASSENGER: 0,
+                COMPANY: 0,
+                MINISTRY: 0,
+                SUPERADMIN: 0
+            };
+
+            allUsers.forEach(user => {
+                stats[user.role]++;
+            });
+
+            document.getElementById('passengerCount').textContent = stats.PASSENGER;
+            document.getElementById('companyCount').textContent = stats.COMPANY;
+            document.getElementById('ministryCount').textContent = stats.MINISTRY;
+            document.getElementById('superadminCount').textContent = stats.SUPERADMIN;
+        }
+
+        // Open role change modal
+        function openRoleChangeModal(userId, userName, currentRole) {
+            selectedUserForChange = { userId, userName, currentRole };
+            document.getElementById('userInfo').innerHTML = `
+                <p><strong>Gebruiker:</strong> ${userName}</p>
+                <p><strong>Huidige Rol:</strong> ${currentRole}</p>
+            `;
+            document.getElementById('newRoleSelect').value = '';
+            document.getElementById('roleChangeModal').classList.remove('hidden');
+        }
+
+        // Close modal
+        function closeRoleChangeModal() {
+            document.getElementById('roleChangeModal').classList.add('hidden');
+            selectedUserForChange = null;
+        }
+
+        // Confirm role change
+        async function confirmRoleChange() {
+            const newRole = document.getElementById('newRoleSelect').value;
+            
+            if (!newRole) {
+                alert('Selecteer alstublieft een rol');
+                return;
+            }
+
+            try {
+                const userId = sessionStorage.getItem('userId');
+                const userRole = sessionStorage.getItem('userRole');
+
+                const response = await fetch('http://localhost:5000/api/admin/change-user-role', {
+                    method: 'POST',
+                    headers: {
+                        'x-user-id': userId,
+                        'x-user-role': userRole,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        user_id: selectedUserForChange.userId,
+                        new_role: newRole
+                    })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(`Rol succesvol gewijzigd naar ${newRole}`);
+                    closeRoleChangeModal();
+                    loadUsers(); // Reload users
+                } else {
+                    alert('Fout: ' + data.error);
+                }
+            } catch (err) {
+                alert('Verbindingsfout bij wijzigen rol');
+                console.error(err);
+            }
+        }
+
+        // Export user data
+        function exportUserData() {
+            const csv = 'ID,Voornaam,Achternaam,Email,Rol\n' + 
+                allUsers.map(u => `${u.user_id},${u.first_name},${u.last_name},${u.email},${u.role}`).join('\n');
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'switirit_users.csv';
+            a.click();
+        }
+
+        // Logout
+        function logoutAdmin() {
+            if (confirm('Weet je zeker dat je wilt afmelden?')) {
+                sessionStorage.clear();
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Placeholder for bulk role change
+        function showBulkRoleChange() {
+            alert('Bulk rol wijzigen functionaliteit wordt nog implementeerd');
+        }
+    </script>
+</body>
+</html>

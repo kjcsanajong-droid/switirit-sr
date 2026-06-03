@@ -9,9 +9,9 @@
 <body>
     <nav class="main-nav">
         <div class="nav-container">
-            <a href="index.html" class="brand-name">
+            <div class="brand-name">
                 <span class="brand-switi">Switi</span><span class="brand-rit">Rit</span><span class="brand-sr">.SR</span>
-            </a>
+            </div>
             <div class="nav-links">
                 <a href="index.html">Home</a>
                 <a href="beoordelen.html" class="active">Beoordelen</a>
@@ -21,6 +21,15 @@
             </div>
         </div>
     </nav>
+
+    <script>
+        // Guard: Redirect non-passengers away from feedback page
+        const userRole = sessionStorage.getItem('userRole') || 'PASSENGER';
+        if (userRole !== 'PASSENGER') {
+            alert('Deze pagina is alleen beschikbaar voor passagiers.');
+            window.location.href = 'index.html';
+        }
+    </script>
 
     <header class="review-hero">
         <div class="hero-copy">
