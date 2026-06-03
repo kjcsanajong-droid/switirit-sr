@@ -13,6 +13,7 @@ CREATE TABLE users (
     email VARCHAR(100) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
     role ENUM('PASSENGER', 'COMPANY', 'MINISTRY', 'SUPERADMIN') DEFAULT 'PASSENGER',
+    coins INT DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -158,13 +159,14 @@ DELIMITER ;
 -- 5. SEED DATA (Jouw team & de 24 lijnen)
 -- =========================================================
 
-INSERT INTO users (user_id, first_name, last_name, email, password_hash, role) VALUES  
-(1, 'Kane', 'SystemAdmin', 'kjcsanajong@gmail.com', '$2b$10$M9bV8c7X6z5Y4w3V2u1tO6xG5qYjXzEw7M8k9C9d9E9f9G9h9i2b', 'SUPERADMIN'),
-(2, 'Ashmit', 'Developer', 'amaharban5@gmail.com', '$2b$10$Rz7vO6Y8W9/eB7P8k7T1uO6XG5qYjXzEw7M8k9C9d9E9f9G9h9i1a', 'SUPERADMIN'),
-(3, 'Teersa', 'Developer', 'teersamorgenstond07@gmail.com', '$2b$10$P1o2I3u4Y5t6R7e8W9q0O6xG5qYjXzEw7M8k9C9d9E9f9G9h9i3c', 'MINISTRY'),
-(4, 'Chantelle', 'Developer', 'chanierelyveld@gmail.com', '$2b$10$Z1x2C3v4B5n6M7a8S9d0O6xG5qYjXzEw7M8k9C9d9E9f9G9h9i4d', 'PASSENGER'),
-(5, 'Ferrence', 'SystemAdmin', 'itzzferr171@gmail.com', '$2b$10$V3w6X9z2B5e8H1k4M7q0O6xG5qYjXzEw7M8k9C9d9E9f9G9h9i5e', 'SUPERADMIN'),
-(6, 'Garagedeur NV', 'Company', 'bedrijf@bus.sr', 'hashed_pass', 'COMPANY');
+INSERT INTO users (user_id, first_name, last_name, email, password_hash, role, coins) VALUES  
+(1, 'Kane', 'SystemAdmin', 'kjcsanajong@gmail.com', '$2b$10$M9bV8c7X6z5Y4w3V2u1tO6xG5qYjXzEw7M8k9C9d9E9f9G9h9i2b', 'SUPERADMIN', 0),
+(2, 'Ashmit', 'Developer', 'amaharban5@gmail.com', '$2b$10$Rz7vO6Y8W9/eB7P8k7T1uO6XG5qYjXzEw7M8k9C9d9E9f9G9h9i1a', 'SUPERADMIN', 5),
+(3, 'Teersa', 'Developer', 'teersamorgenstond07@gmail.com', '$2b$10$P1o2I3u4Y5t6R7e8W9q0O6xG5qYjXzEw7M8k9C9d9E9f9G9h9i3c', 'MINISTRY', 0),
+(4, 'Chantelle', 'Developer', 'chanierelyveld@gmail.com', '$2b$10$Z1x2C3v4B5n6M7a8S9d0O6xG5qYjXzEw7M8k9C9d9E9f9G9h9i4d', 'PASSENGER', 10),
+(5, 'Ferrence', 'SystemAdmin', 'itzzferr171@gmail.com', '$2b$10$V3w6X9z2B5e8H1k4M7q0O6xG5qYjXzEw7M8k9C9d9E9f9G9h9i5e', 'SUPERADMIN', 0),
+(6, 'Garagedeur NV', 'Company', 'bedrijf@bus.sr', 'hashed_pass', 'COMPANY', 0),
+(7, 'Ministerie van', 'Justitie', 'justitie@sr.gov.sr', '$2b$10$Q8r5N6m7L8k9J0h1G2f3O6xG5qYjXzEw7M8k9C9d9E9f9G9h9i6f', 'MINISTRY', 0);
 
 INSERT INTO bus_routes (route_id, route_name, description) VALUES  
 (1, 'Lijn 1', 'CHM building - Hermitageweg'), 
